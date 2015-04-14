@@ -10,8 +10,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdarg.h>
-
 #include <util.h>
 
 typedef enum {
@@ -29,10 +27,16 @@ typedef enum {
 int main(int argc, char *argv[]) {
 	int i;
 	main_arg_state state = MainArgStateDefault;
+	char *input = 0;
+	char *output = 0;
 
+	if (argc == 1) {
+		printf("%s\n", "moecc [-v] [-f file.moe] [-o out.c] | man moecc");
+		return 0;
+	}
 	for (i = 1; i < argc; i++) {
 		if (strcmp_m(argv[i], 2, "-v", "--version")) {
-			printf("%s%s\n", "moecc version :: c", GIT_REVISION);
+			printf("%s%s\n", "moecc version :: c-", GIT_REVISION);
 			return 0;
 		}
 		else if (strcmp_m(argv[i], 3, "-f", "-i", "--input")) {
@@ -43,19 +47,38 @@ int main(int argc, char *argv[]) {
 		}
 		else {
 			if (state == MainArgStateInput) {
-				printf("%s%s\n", "input :: ", argv[i]);
+				if (input == 0) {
+					input = argv[i];
+				}
+				else {
+					printf("%s\n", "error :: more than one input");
+				}
 			}
 			else if (state == MainArgStateOutput) {
-				printf("%s%s\n", "output :: ", argv[i]);
+				if (output == 0) {
+					output = argv[i];
+				}
+				else {
+					printf("%s\n", "error :: more than one output");
+				}
 			}
 			else {
-				printf("%s%s\n", "invalid arg :: ", argv[i]);
+				printf("%s%s\n", "error :: invalid arg -> ", argv[i]);
 				return 0;
 			}
 		}
+	}	
+	if (!input || !output) {
+		printf("%s\n", "error :: missing input or output file");
+		return 0;
 	}
-
-	printf("%s\n", "bye~");
+	else {
+		/**
+		 * safe to compile
+		 */
+		printf("compiling %s to %s... ", input, output);
+		printf("%s\n", "done ~ bye!");
+	}
 	return 0;
 }
 

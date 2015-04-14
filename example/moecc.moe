@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
 	for (i = 1; i < argv; i++) {
 		if (str_eq(argv[i], "-v") || str_eq(argv[i], "--version")) {
-			printf("%s%s\n", "moecc version :: mc", GIT_REVISION);
+			printf("%s%s\n", "moecc version :: mc-", GIT_REVISION);
 			return 0;
 		}
 		switch ($ argv[i]) {

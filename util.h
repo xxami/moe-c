@@ -2,6 +2,8 @@
 #ifndef __moec_util_h
 #define __moe_util_h
 
+#include <stdarg.h>
+
 /**
  * retrurn true if char* arg1 is equal 
  * to any other n given char*  va_args
