@@ -12,29 +12,13 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include <util.h>
+
 typedef enum {
 	MainArgStateDefault,
 	MainArgStateInput,
 	MainArgStateOutput,
 } main_arg_state;
-
-/**
- * retrurn true if char* arg1 is equal 
- * to any other n given char*  va_args
- */
-bool strcmp_m(char *s1, int n, ...) {
-	va_list va;
-	int i;
-	char *c;
-
-	va_start(va, n);
-	for (i = 0; i < n; i++) {
-		c = va_arg(va, char *);
-		if (strcmp(s1, c) == 0) return true;
-	}
-	
-	return false;
-}
 
 /**
  * moecc
@@ -48,7 +32,8 @@ int main(int argc, char *argv[]) {
 
 	for (i = 1; i < argc; i++) {
 		if (strcmp_m(argv[i], 2, "-v", "--version")) {
-			printf("%s%s\n", "moecc version :: ", GIT_REVISION);
+			printf("%s%s\n", "moecc version :: c", GIT_REVISION);
+			return 0;
 		}
 		else if (strcmp_m(argv[i], 3, "-f", "-i", "--input")) {
 			state = MainArgStateInput;
@@ -65,11 +50,12 @@ int main(int argc, char *argv[]) {
 			}
 			else {
 				printf("%s%s\n", "invalid arg :: ", argv[i]);
+				return 0;
 			}
 		}
 	}
 
-	printf("%s", "bye~\n");
+	printf("%s\n", "bye~");
 	return 0;
 }
 

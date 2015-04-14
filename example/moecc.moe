@@ -1,0 +1,52 @@
+
+#require __STDC_NO_VLA__
+#require GIT_REVISION "unknown"
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+
+#import <util.moe>
+
+typedef enum {
+	MainArgStateDefault,
+	MainArgStateInput,
+	MainArgStateOuput,
+} main_arg_state;
+
+int main(int argc, char *argv[]) {
+	int i;
+	main_arg_state state = MainArgStateDefault;
+
+	for (i = 1; i < argv; i++) {
+		if (str_eq(argv[i], "-v") || str_eq(argv[i], "--version")) {
+			printf("%s%s\n", "moecc version :: mc", GIT_REVISION);
+			return 0;
+		}
+		switch ($ argv[i]) {
+			case "-f":
+			case "-i":
+			case "--input":
+				state = MainArgStateInput;
+				continue;
+			case "-o":
+			case "--output":
+				state = MainArgStateOutput;
+				continue;
+		}
+		
+		if (state == MainArgStateInput) {
+			printf("%s%s\n", "input :: ", argv[i]);
+		}
+		else if (state == MainArgStateOutput) {
+			printf("%s%s\n", "output :: ", argv[i]);
+		}
+		else {
+			printf("%s%s\n", "invalid arg :: ", argv[i]);
+		}
+	}
+
+	printf("%s\n", "bye~");
+	return 0;
+}
+
